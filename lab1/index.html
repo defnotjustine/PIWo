@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Księgarnia Kapibara</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Księgarnia Kapibara</h1>
+      <button id="login-btn">Zaloguj</button>
+      <button id="cart-btn">Koszyk</button>
+    </header>
+
+    <main>
+      <section id="filters">
+        <input type="text" id="search" placeholder="Wyszukaj książkę..." />
+        <select id="cover-filter">
+          <option value="">Wybierz okładkę</option>
+          <option value="twarda">Twarda</option>
+          <option value="miękka">Miękka</option>
+        </select>
+        <input type="number" id="price-filter" placeholder="Maks. cena" />
+        <button id="search-btn">Szukaj</button>
+      </section>
+
+      <section id="book-list">
+        <h2>Lista książek</h2>
+        <ul>
+          <li>Książka 1 - Autor 1</li>
+          <li>Książka 2 - Autor 2</li>
+        </ul>
+      </section>
+
+      <button id="add-book-btn" onclick="window.location.href='index2.html'">
+        Dodaj nową pozycję
+      </button>
+    </main>
+  </body>
+</html>
