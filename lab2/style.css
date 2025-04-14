@@ -1,62 +1,4 @@
-* {
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-    background: #f0f2f5;
-    padding: 20px;
-  }
-  
-  .container {
-    max-width: 800px;
-    margin: auto;
-    background: #fff;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  }
-  
-  .add-task,
-  .search-container,
-  .add-list {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-  }
-  
-  input[type="text"] {
-    flex: 1;
-    padding: 8px;
-  }
-  
-  button {
-    padding: 8px 16px;
-    cursor: pointer;
-  }
-  
-  .list {
-    margin-bottom: 20px;
-  }
-  
-  .list h2 {
-    cursor: pointer;
-    user-select: none;
-  }
-  
-  ul {
-    list-style-type: none;
-    padding-left: 20px;
-  }
-  
-  li {
-    margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  li.done span.task-text {
+li.done span.task-text {
     text-decoration: line-through;
     color: gray;
   }
@@ -69,24 +11,21 @@
   
   .task-buttons button {
     margin-left: 5px;
-    background-color: #f88;
-    border: none;
-    padding: 4px 8px;
   }
   
-  .modal {
-    position: fixed;
-    display: none;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: rgba(0,0,0,0.4);
-    justify-content: center;
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  li {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-  }
-  
-  .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
+    padding: 6px 10px;
+    border-bottom: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 4px;
+    margin-bottom: 4px;
   }
   
