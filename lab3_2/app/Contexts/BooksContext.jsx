@@ -1,6 +1,15 @@
 import { createContext, useState, useEffect } from "react";
 import { db } from "../firebase";
-import { collection, getDocs, addDoc, query, where } from "firebase/firestore";
+import { 
+  collection, 
+  getDocs, 
+  addDoc, 
+  doc, 
+  updateDoc, 
+  deleteDoc,
+  query, 
+  where 
+} from "firebase/firestore";
 import { auth } from "../firebase";
 
 export const BooksContext = createContext();
@@ -42,7 +51,7 @@ export const BooksProvider = ({ children }) => {
         createdAt: new Date().toISOString()
       };
       const docRef = await addDoc(collection(db, "books"), newBook);
-      fetchBooks(); // Odśwież listę książek
+      await fetchBooks();
       return docRef.id;
     } catch (error) {
       console.error("Error adding book: ", error);
@@ -50,8 +59,37 @@ export const BooksProvider = ({ children }) => {
     }
   };
 
+  const updateBook = async (id, updatedData) => {
+    try {
+      const bookRef = doc(db, "books", id);
+      await updateDoc(bookRef, updatedData);
+      await fetchBooks();
+    } catch (error) {
+      console.error("Error updating book: ", error);
+      throw error;
+    }
+  };
+
+  const deleteBook = async (id) => {
+    try {
+      const bookRef = doc(db, "books", id);
+      await deleteDoc(bookRef);
+      await fetchBooks();
+    } catch (error) {
+      console.error("Error deleting book: ", error);
+      throw error;
+    }
+  };
+
   return (
-    <BooksContext.Provider value={{ books, addBook, user, loading }}>
+    <BooksContext.Provider value={{ 
+      books, 
+      addBook, 
+      updateBook, 
+      deleteBook, 
+      user, 
+      loading 
+    }}>
       {children}
     </BooksContext.Provider>
   );
