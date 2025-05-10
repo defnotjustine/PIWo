@@ -1,73 +1,57 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
+import { db } from "../firebase";
+import { collection, getDocs, addDoc, query, where } from "firebase/firestore";
+import { auth } from "../firebase";
 
 export const BooksContext = createContext();
 
 export const BooksProvider = ({ children }) => {
-  const [books, setBooks] = useState([
-    {
-      id: 1,
-      title: "Władca Pierścieni",
-      author: "J.R.R. Tolkien",
-      category: "Fantasy",
-    },
-    {
-      id: 2,
-      title: "Duma i uprzedzenie",
-      author: "Jane Austen",
-      category: "Klasyka",
-    },
-    {
-      id: 3,
-      title: "1984",
-      author: "George Orwell",
-      category: "Dystopia",
-    },
-    {
-      id: 4,
-      title: "Buszujący w zbożu",
-      author: "J.D. Salinger",
-      category: "Klasyka",
-    },
-    {
-      id: 5,
-      title: "Zabić drozda",
-      author: "Harper Lee",
-      category: "Klasyka",
-    },
-    {
-      id: 6,
-      title: "Harry Potter i Kamień Filozoficzny",
-      author: "J.K. Rowling",
-      category: "Fantasy",
-    },
-    {
-      id: 7,
-      title: "Rok 1984",
-      author: "George Orwell",
-      category: "Dystopia",
-    },
-    {
-      id: 8,
-      title: "Mistrz i Małgorzata",
-      author: "M. Bułhakow",
-      category: "Fantastyka",
-    },
-    {
-      id: 9,
-      title: "Ojciec chrzestny",
-      author: "Mario Puzo",
-      category: "Thriller",
-    },
-    {
-      id: 10,
-      title: "Sto lat samotności",
-      author: "Gabriel García Márquez",
-      category: "Magiczny realizm",
-    },
-  ]);
+  const [books, setBooks] = useState([]);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+      fetchBooks();
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const fetchBooks = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "books"));
+      const booksData = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setBooks(booksData);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching books: ", error);
+      setLoading(false);
+    }
+  };
+
+  const addBook = async (book) => {
+    try {
+      const newBook = {
+        ...book,
+        userId: user?.uid || null,
+        createdAt: new Date().toISOString()
+      };
+      const docRef = await addDoc(collection(db, "books"), newBook);
+      fetchBooks(); // Odśwież listę książek
+      return docRef.id;
+    } catch (error) {
+      console.error("Error adding book: ", error);
+      throw error;
+    }
+  };
 
   return (
-    <BooksContext.Provider value={{ books, setBooks }}>
+    <BooksContext.Provider value={{ books, addBook, user, loading }}>
       {children}
     </BooksContext.Provider>
   );
